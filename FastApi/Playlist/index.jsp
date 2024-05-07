@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
     <meta charset="UTF-8">
@@ -10,6 +12,16 @@
     
 </head>
 <body>
+
+  <%
+
+  String title  = null;
+  String artist = null;
+
+  title   = request.getParameter("title") == null ? "": request.getParameter("title");
+  artist  = request.getParameter("artist") == null ? "": request.getParameter("artist");
+
+  %>
 
 <style>
  :root {
@@ -124,11 +136,11 @@ body {
 
 <div class="container">
     <div class="music-player">
-    <h1>Side to side</h1>
-    <p>Ariana Grande</p>
+    <h1><%=title %></h1>
+    <p><%=artist %></p>
     
     <audio controls id="song">
-        <source src="/static/Side To Side.mp3" type="audio/mpeg">
+        <source src=<% out.println("/static/" + title + ".mp3");%> type="audio/mpeg">
     </audio>
     <input type="range" value="0" id="progress">
 
