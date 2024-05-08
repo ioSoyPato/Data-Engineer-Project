@@ -1,6 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+
 
 app = FastAPI()
 
@@ -9,9 +12,25 @@ app.mount("/static", StaticFiles(directory="Playlist"), name="static")
 app.mount("/static2", StaticFiles(directory="Home_Page"), name="static2")
 app.mount("/static3", StaticFiles(directory="Users"), name="static3")
 
-def get_next_song(genre: str, current_song_id: str, current_song_genre: str):
+templates = Jinja2Templates(directory="Playlist")
+
+@app.get("/playlist/{title}/{artist}/{genre}/{id}", response_class=HTMLResponse)
+async def read_item(request: Request, title: str, artist: str, genre: str, id: str):
+    return templates.TemplateResponse(
+        request=request, name="index.html", context={"title": title, "artist": artist, "genre": genre, "id": id}
+    )
+
+@app.get("/playlist2/{genre}/{current_song_id}/{current_song_genre}", response_class=HTMLResponse)
+async def get_next_song(request: Request, genre: str, current_song_id: str, current_song_genre: str):
     if current_song_genre == genre:
-        return f"{genre}_song_{int(current_song_id) + 1}.mp3"
+        #f"{genre}_song_{int(current_song_id) + 1}.mp3"
+        title = 'Side To Side'
+        artist = 'Ariana Grande'
+        genre = 'rock'
+        id = 'rock1'
+        return templates.TemplateResponse(
+        request=request, name="index.html", context={"title": title, "artist": artist, "genre": genre, "id": id}
+    )
     return f"{genre}_song_1.mp3"
 
 @app.get("/helloworld")
@@ -21,10 +40,6 @@ def greeting():
 @app.get("/home")
 async def home():
     return FileResponse("Home_Page/index.html") 
-
-@app.get("/playlist/")
-async def root():
-    return FileResponse("Playlist/index.html")
 
 @app.get("/")
 async def user():
