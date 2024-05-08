@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -12,17 +10,6 @@
     
 </head>
 <body>
-
-  <%
-
-  String title  = null;
-  String artist = null;
-
-  title   = request.getParameter("title") == null ? "": request.getParameter("title");
-  artist  = request.getParameter("artist") == null ? "": request.getParameter("artist");
-
-  %>
-
 <style>
  :root {
   --primary-clr: rgba(228, 228, 229, 1);
@@ -136,18 +123,18 @@ body {
 
 <div class="container">
     <div class="music-player">
-    <h1><%=title %></h1>
-    <p><%=artist %></p>
+    <h1>{{title}}</h1>
+    <p>{{artist}}</p>
     
     <audio controls id="song">
-        <source src=<% out.println("/static/" + title + ".mp3");%> type="audio/mpeg">
+        <source src="/static/{{title}}.mp3" type="audio/mpeg">
     </audio>
     <input type="range" value="0" id="progress">
 
     <div class="controls">
         <div ><i class="fa-solid fa-backward"></i></div>
         <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
-        <div><i class="fa-solid fa-forward"></i></div>
+        <div><a href="{{url_for('get_next_song', genre=genre, current_song_id = id, current_song_genre=genre)}}"><i class="fa-solid fa-forward"></i></a></div>
 
     </div>
     </div>
